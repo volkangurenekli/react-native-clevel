@@ -1,0 +1,2 @@
+export const GET_SHOWS_SUCCESS = 'GET_SHOWS_SUCCESS';
+export const SELECT_SHOW = 'SELECT_SHOW';
