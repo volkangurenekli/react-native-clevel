@@ -3,15 +3,15 @@ import {
   SafeAreaView,
   FlatList,
   View,
-  Text,
   StyleSheet,
   TouchableOpacity,
   TextInput,
-  Button,
 } from 'react-native';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import * as tvShowsActions from '../../redux/actions/tvShowsActions';
+import {Header, Button, Item, Input, Text} from 'native-base';
+import XCard from '../../components/Card';
 
 class Search extends Component {
   constructor(props) {
@@ -24,6 +24,8 @@ class Search extends Component {
   }
 
   onPress = item => {
+    console.log('VOLKAN: Search -> item', item);
+
     this.props.actions.selectShow(item);
     this.props.navigation.navigate('Detail');
   };
@@ -36,31 +38,29 @@ class Search extends Component {
     console.log(this.props);
     return (
       <SafeAreaView style={styles.container}>
-        <TextInput
-          style={{
-            height: 40,
-            borderColor: 'gray',
-            borderWidth: 1,
-            marginLeft: 20,
-            marginRight: 20,
-          }}
-          onChangeText={text => this.onChangeText(text)}
-          value={this.state.value}
-        />
-        <Button
-          title="Search"
-          color="#f194ff"
-          onPress={() => this.props.actions.getShows(this.state.value)}
-        />
+        <Header searchBar rounded>
+          <Item>
+            <Input
+              placeholder="Search"
+              onChangeText={text => this.onChangeText(text)}
+              value={this.state.value}
+            />
+          </Item>
+          <Button
+            transparent
+            onPress={() => this.props.actions.getShows(this.state.value)}>
+            <Text>Search</Text>
+          </Button>
+        </Header>
 
         <FlatList
           data={this.props.shows}
           renderItem={({item}) => (
-            <View key={item} style={styles.item}>
-              <TouchableOpacity onPress={() => this.onPress(item)}>
-                <Text style={styles.title}>{item.show.name}</Text>
-              </TouchableOpacity>
-            </View>
+            <XCard
+              key={item}
+              onPress={() => this.onPress(item)}
+              content={item.show}
+            />
           )}
           keyExtractor={item => item.show.id.toString()}
         />
@@ -93,7 +93,6 @@ export default connect(
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    marginTop: 15,
   },
   item: {
     backgroundColor: '#f9c2ff',
